@@ -1,4 +1,4 @@
 defmodule MyList do
-  def mapsum([], _),      do: 0
-  def mapsum([h | t], f), do: f.(h) + mapsum(t, f)
+  def mapsum([], _), do: 0
+  def mapsum([head | tail], func), do: func.(head) + mapsum(tail, func)
 end
