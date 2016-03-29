@@ -32,13 +32,47 @@ defmodule Noaa.CLI do
   end
 
   def process(:help) do
-    IO.puts """
-    usage: noaa --station <station>
-    """
+    IO.puts "usage: noaa --station <station>"
     System.halt(0)
   end
 
   def process(station) do
     Noaa.fetch(station)
+    |> print
+  end
+  
+  def column_from_element(xml, elem) do
+    # cheap and easy way, no xml parser required
+    res = Regex.run(~r/<#{elem}>(.+)<\/#{elem}>/, xml)
+    case res do
+      [_, text] -> text
+      _         -> ""
+    end
+  end
+    
+  def fields do
+    [ location:                "Location",
+      latitude:                "Lat",
+      longitude:               "Lng",
+      observation_time_rfc822: "Observation Time",
+      weather:                 "Weather",
+      temperature_string:      "Temp",
+      relative_humidity:       "Relative Humidity",
+      wind_string:             "Wind",
+      pressure_string:         "Pressure",
+      dewpoint_string:         "Dewpoint" ]
+  end
+
+  def print({:error, message}) do
+    IO.puts(message)
+    System.halt(1)
+  end
+
+  def print({ :ok, xml}) do
+    IO.puts "Weather information"
+    IO.puts "*******************"
+    Enum.each(Keyword.keys(fields), fn(field) ->
+      IO.puts "#{fields[field]}: #{column_from_element(xml, field)}"
+    end)
   end
 end

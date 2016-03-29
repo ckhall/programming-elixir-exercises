@@ -2,7 +2,7 @@ defmodule CliTest do
   use ExUnit.Case
   doctest Noaa.CLI
 
-  import Noaa.CLI, only: [ parse_args: 1 ]
+  import Noaa.CLI, only: [ parse_args: 1, column_from_element: 2 ]
 
   test ":help returned by option parsing with -h and --help options" do
     assert parse_args(["-h",     "anything"]) == :help
@@ -17,4 +17,13 @@ defmodule CliTest do
   test "accepts lowercase station argument and upcases it" do
     assert parse_args(["-s",        "abcd"]) == "ABCD"
   end
+  
+  test "column_from_xml returns the text of the given element name" do
+    assert column_from_element("<foo>bar</foo>", "foo") == "bar"
+  end
+  
+  test "column_from_xml returns nil if given element name does not exist" do
+    assert column_from_element("<foo>bar</foo>", "baz") == ""
+  end
+
 end

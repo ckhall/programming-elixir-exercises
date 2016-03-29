@@ -2,12 +2,14 @@ defmodule Noaa.Mixfile do
   use Mix.Project
 
   def project do
-    [ app: :noaa,
-      version: "0.0.1",
-      elixir: "~> 1.2",
-      build_embedded: Mix.env == :prod,
-      start_permanent: Mix.env == :prod,
-      deps: deps
+    [ app:               :noaa,
+      version:           "0.0.1",
+      elixir:            "~> 1.2",
+      test_coverage: [tool: Coverex.Task],
+      escript:           [ main_module: Noaa.CLI ],
+      build_embedded:    Mix.env == :prod,
+      start_permanent:   Mix.env == :prod,
+      deps:              deps
     ]
   end
 
@@ -15,7 +17,7 @@ defmodule Noaa.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [ applications: [ :logger ] ]
+    [ applications: [ :logger, :httpoison ] ]
   end
 
   # Dependencies can be Hex packages:
@@ -28,6 +30,8 @@ defmodule Noaa.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    [ httpoison: "~> 0.8" ]
+    [ { :httpoison, "~> 0.8" },
+      { :coverex,   "~> 1.4", only: :test }
+    ]
   end
 end

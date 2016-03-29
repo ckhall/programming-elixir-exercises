@@ -6,30 +6,22 @@ defmodule Noaa do
     station
     |> to_url
     |> HTTPoison.get
-    |> handle_response
+    |> handle_response(station)
   end
   
   def to_url(station) do
     "#{@host}/#{station}.xml"
   end
   
-  def column_from_xml(xml, elem) do
-    res = Regex.run(~r/<#{elem}>(.+)<\/#{elem}>/, xml)
-    case res do
-      [_, text] -> text
-      _         -> nil
-    end
-  end
-  
-  defp handle_response({:ok, %{ status_code: 200, body: body}}) do
+  defp handle_response({:ok, %{ status_code: 200, body: body}}, _) do
     { :ok, body }
   end
 
-  defp handle_response({_, %{ status_code: 404, body: body}}) do
-    { :error,  "Station not found"}
+  defp handle_response({_, %{ status_code: 404, body: _}}, station) do
+    { :error,  "Station #{station} not found"}
   end
 
-  defp handle_response({_, %{ status_code: status, body: _}}) do
+  defp handle_response({_, %{ status_code: status, body: _}}, _) do
     { :error,  "#{status}"}
   end
 end
