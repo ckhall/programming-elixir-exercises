@@ -5,7 +5,7 @@ defmodule Noaa.Mixfile do
     [ app:               :noaa,
       version:           "0.0.1",
       elixir:            "~> 1.2",
-      test_coverage: [tool: Coverex.Task],
+      test_coverage:     [ tool: Coverex.Task ],
       escript:           [ main_module: Noaa.CLI ],
       build_embedded:    Mix.env == :prod,
       start_permanent:   Mix.env == :prod,
@@ -31,7 +31,8 @@ defmodule Noaa.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [ { :httpoison, "~> 0.8" },
-      { :coverex,   "~> 1.4", only: :test }
+      { :coverex,   "~> 1.4",   only: :test },
+      { :meck,      "~> 0.8",   only: :test }
     ]
   end
 end

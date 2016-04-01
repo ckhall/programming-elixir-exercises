@@ -33,7 +33,6 @@ defmodule Noaa.CLI do
 
   def process(:help) do
     IO.puts "usage: noaa --station <station>"
-    System.halt(0)
   end
 
   def process(station) do
@@ -65,7 +64,6 @@ defmodule Noaa.CLI do
 
   def print({:error, message}) do
     IO.puts(message)
-    System.halt(1)
   end
 
   def print({ :ok, xml}) do

@@ -2,7 +2,8 @@ defmodule CliTest do
   use ExUnit.Case
   doctest Noaa.CLI
 
-  import Noaa.CLI, only: [ parse_args: 1, column_from_element: 2 ]
+  import ExUnit.CaptureIO
+  import Noaa.CLI
 
   test ":help returned by option parsing with -h and --help options" do
     assert parse_args(["-h",     "anything"]) == :help
@@ -26,4 +27,10 @@ defmodule CliTest do
     assert column_from_element("<foo>bar</foo>", "baz") == ""
   end
 
+  test "printing an error to print an error" do
+    result = capture_io(fn ->
+      print({ :error, "foobar" })
+    end)
+    assert result == "foobar\n"      
+  end
 end

@@ -9,19 +9,19 @@ defmodule Noaa do
     |> handle_response(station)
   end
   
-  def to_url(station) do
+  defp to_url(station) do
     "#{@host}/#{station}.xml"
   end
   
-  defp handle_response({:ok, %{ status_code: 200, body: body}}, _) do
+  defp handle_response({ :ok, %{ status_code: 200, body: body } }, _) do
     { :ok, body }
   end
 
-  defp handle_response({_, %{ status_code: 404, body: _}}, station) do
-    { :error,  "Station #{station} not found"}
+  defp handle_response({ _, %{ status_code: 404, body: _ } }, station) do
+    { :error,  "Station #{station} not found" }
   end
 
-  defp handle_response({_, %{ status_code: status, body: _}}, _) do
-    { :error,  "#{status}"}
+  defp handle_response({ _, %{ status_code: status, body: _ } }, _) do
+    { :error,  "#{status}" }
   end
 end
